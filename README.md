@@ -15,7 +15,7 @@ A framework that generates security test cases from attack trees using LLMs.
    * Example: If you pulled "mistral" and "mistral-small", use those exact names
 
 3. Set up ChromaDB:
-   * Download the pre-built ChromaDB from Google Drive [link]
+   * Download the pre-built ChromaDB from Google Drive [[link](https://drive.google.com/file/d/1R9cARRnoTBbQzHGM49mHqNeLwC7cm9eD/view?usp=drive_link)]
    * Extract the contents to `./chromadb` directory in your project root
    * This contains pre-indexed security documentation for better test generation
 
