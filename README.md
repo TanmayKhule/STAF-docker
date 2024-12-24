@@ -8,50 +8,18 @@ A framework that generates security test cases from attack trees using LLMs.
 
 ## Quick Start with Docker
 
-The fastest way to get started is using our pre-built Docker image:
-
-```bash
-# Pull the image
-docker pull yourusername/staf:latest
-
-# Run with GPU support and host network
-docker run --network=host --gpus=all --env-file ./.env -v ./custom_config.yaml:/app/config.yaml staf-api:latest
-```
-
-## Manual Setup
-
-### 1. Install Dependencies
-```bash
-pip install -r requirements.txt
-```
-
-### 2. Configure Ollama
-* Install Ollama from [ollama.ai](https://ollama.ai)
-* Pull the required model:
-```bash
-ollama pull llama2:8b
-```
-
-### 3. Set up ChromaDB
-* Download the pre-built ChromaDB from [Google Drive](https://drive.google.com/file/d/1R9cARRnoTBbQzHGM49mHqNeLwC7cm9eD/view?usp=drive_link)
-* Extract the contents to `./chromadb` directory in your project root
-* This contains pre-indexed security documentation for better test generation
-
-### 4. Configuration
-
-Create `custom_config.yaml`:
-
+1. Create configuration file `custom_config.yaml`:
 ```yaml
 llm:
   provider: "ollama"
-  model: "llama2:8b"
+  model: "llama3.1:8b"
   max_attempts: 4
-  grader_model: "llama2:8b"
+  grader_model: "llama3.1:8b"
   temperature: 0
   max_tokens: 200000
   timeout: 240
   models_to_pull:
-    - "llama2:8b"
+    - "llama3.1:8b"
 
 vectorstore:
   model_name: "Alibaba-NLP/gte-large-en-v1.5"
@@ -72,13 +40,53 @@ logging:
   datefmt: "%Y-%m-%d %H:%M:%S"
 ```
 
-### 5. Required API Keys
+2. Create `.env` file with your API tokens:
+```bash
+HF_TOKEN=your_huggingface_token
+HUGGINGFACE_TOKEN=your_huggingface_token
+TAVILY_API_KEY=your_tavily_key
+```
+
+3. Pull and run the Docker image:
+```bash
+# Pull the image
+docker pull yourusername/staf:latest
+
+# Run with GPU support and host network
+docker run --network=host --gpus=all --env-file ./.env -v ./custom_config.yaml:/app/config.yaml staf-api:latest
+```
+
+## Manual Setup
+
+### 1. Install Dependencies
+```bash
+pip install -r requirements.txt
+```
+
+### 2. Configure Ollama
+* Install Ollama from [ollama.ai](https://ollama.ai)
+* Pull the required model:
+```bash
+ollama pull llama3.1:8b
+```
+
+### 3. Set up ChromaDB
+* Download the pre-built ChromaDB from [Google Drive](https://drive.google.com/file/d/1R9cARRnoTBbQzHGM49mHqNeLwC7cm9eD/view?usp=drive_link)
+* Extract the contents to `./chromadb` directory in your project root
+* This contains pre-indexed security documentation for better test generation
+
+
+### 5. Required API Keys in DockerFile and Config
 * HuggingFace token: Get from [HuggingFace](https://huggingface.co/)
 * Add tokens to your `.env` file:
 ```bash
 HF_TOKEN=your_huggingface_token
 HUGGINGFACE_TOKEN=your_huggingface_token
 TAVILY_API_KEY=your_tavily_key
+```
+### 6. Run the uvicorn app
+```
+uvicorn app.main:app --host 0.0.0.0 --port 80
 ```
 
 ## Building the Docker Image
@@ -93,14 +101,12 @@ cd staf
 
 2. Build the Docker image:
 ```bash
-docker build -t staf-api:latest .
+docker build --network=host -t staf-api:latest .
 ```
 
-3. Push to Docker Hub (optional):
+3. Run Docker:
 ```bash
-docker login
-docker tag staf-api:latest yourusername/staf-api:latest
-docker push yourusername/staf-api:latest
+docker run --network=host --gpus=all --env-file ./.env -v ./custom_config.yaml:/app/config.yaml staf-api:latest
 ```
 
 ## API Usage
