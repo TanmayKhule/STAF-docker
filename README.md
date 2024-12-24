@@ -72,7 +72,7 @@ ollama pull llama3.1:8b
 
 ### 3. Set up ChromaDB
 * Download the pre-built ChromaDB from [Google Drive](https://drive.google.com/file/d/1R9cARRnoTBbQzHGM49mHqNeLwC7cm9eD/view?usp=drive_link)
-* Extract the contents to `./chromadb` directory in your project root
+* Extract the contents to your project root
 * This contains pre-indexed security documentation for better test generation
 
 
