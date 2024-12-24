@@ -1,0 +1,67 @@
+{
+    "attack_tree": {
+        "vulnerability": "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')",
+        "main_attack_vectors": [
+            {
+                "vector": "Reflected XSS via Profile Update",
+                "description": "An attacker can inject malicious scripts through profile update fields.",
+                "sub_vectors": [
+                    {
+                        "vector": "Inject script in 'first_name' field",
+                        "steps": [
+                            "Attacker crafts a payload with a malicious script.",
+                            "Attacker submits the payload in the 'first_name' field.",
+                            "The script is reflected back in the response when the profile is viewed."
+                        ]
+                    },
+                    {
+                        "vector": "Inject script in 'last_name' field",
+                        "steps": [
+                            "Attacker crafts a payload with a malicious script.",
+                            "Attacker submits the payload in the 'last_name' field.",
+                            "The script is reflected back in the response when the profile is viewed."
+                        ]
+                    },
+                    {
+                        "vector": "Inject script in 'phone' field",
+                        "steps": [
+                            "Attacker crafts a payload with a malicious script.",
+                            "Attacker submits the payload in the 'phone' field.",
+                            "The script is reflected back in the response when the profile is viewed."
+                        ]
+                    },
+                    {
+                        "vector": "Inject script in 'language' field",
+                        "steps": [
+                            "Attacker crafts a payload with a malicious script.",
+                            "Attacker submits the payload in the 'language' field.",
+                            "The script is reflected back in the response when the profile is viewed."
+                        ]
+                    }
+                ]
+            },
+            {
+                "vector": "Stored XSS via Password Change",
+                "description": "An attacker can inject scripts in the password fields that may be stored and executed later.",
+                "sub_vectors": [
+                    {
+                        "vector": "Inject script in 'password' field",
+                        "steps": [
+                            "Attacker crafts a payload with a malicious script.",
+                            "Attacker submits the payload in the 'password' field.",
+                            "If stored improperly, the script could execute when the password is processed."
+                        ]
+                    },
+                    {
+                        "vector": "Inject script in 'password_confirm' field",
+                        "steps": [
+                            "Attacker crafts a payload with a malicious script.",
+                            "Attacker submits the payload in the 'password_confirm' field.",
+                            "If stored improperly, the script could execute when the password is processed."
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}

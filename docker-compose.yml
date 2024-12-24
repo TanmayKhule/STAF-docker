@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  staf-api:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    network_mode: "host"
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+      - 1.1.1.1
+    volumes:
+      - .:/app
+      - ./chromadb:/app/chromadb
+      - /etc/ssl/certs:/etc/ssl/certs:ro
+    environment:
+      - PYTHONPATH=/app
+      - NVIDIA_VISIBLE_DEVICES=all
+      - REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+      - HF_TOKEN=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
+      - HUGGINGFACE_TOKEN=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
+      - TAVILY_API_KEY="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"
+      - HF_HOME=/app/.cache/huggingface
+      - TRANSFORMERS_OFFLINE=0
+      - HF_DATASETS_OFFLINE=0
+      - CURL_VERBOSE=1
+    depends_on:
+      - ollama
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  ollama:
+    image: ollama/ollama
+    runtime: nvidia
+    network_mode: "host"
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+    volumes:
+      - ollama:/root/.ollama
+
+volumes:
+  ollama:
