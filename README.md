@@ -17,9 +17,9 @@ A framework that generates security test cases from attack trees using LLMs.
 3. Create `config.yaml` in the root directory:
    ```yaml
    llm:
-     model: "mistral"  # Must match your Ollama model name
-     grader_model: "mistral-small"  # Must match your Ollama model name
-     models_to_pull: ["mistral", "mistral-small"]  # List all models to pull at startup
+     model: "llama3.1"  # Must match your Ollama model name
+     grader_model: "llama3.1"  # Must match your Ollama model name
+     models_to_pull: ["llama3.1", "llama3.1:70b"]  # List all models to pull at startup
      temperature: 0
      max_tokens: 200000
      max_attempts: 3
