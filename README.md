@@ -12,7 +12,7 @@ A framework that generates security test cases from attack trees using LLMs.
 2. Configure your Ollama models:
    * Install Ollama and pull your desired models
    * The model names in config.yaml must match exactly with your Ollama model names
-   * Example: If you pulled "mistral" and "mistral-small", use those exact names
+   * Example: If you pulled "llama3.1:8b" and llama3.1:70b", use those exact names
 
 3. Set up ChromaDB:
    * Download the pre-built ChromaDB from Google Drive [[link](https://drive.google.com/file/d/1R9cARRnoTBbQzHGM49mHqNeLwC7cm9eD/view?usp=drive_link)]
