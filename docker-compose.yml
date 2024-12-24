@@ -14,13 +14,14 @@ services:
       - .:/app
       - ./chromadb:/app/chromadb
       - /etc/ssl/certs:/etc/ssl/certs:ro
+      - ${CONFIG_PATH:-./config.yaml}:/app/config.yaml 
     environment:
       - PYTHONPATH=/app
       - NVIDIA_VISIBLE_DEVICES=all
       - REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
-      - HF_TOKEN=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
-      - HUGGINGFACE_TOKEN=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
-      - TAVILY_API_KEY="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"
+      - HF_TOKEN=${HF_TOKEN}
+      - HUGGINGFACE_TOKEN=${HUGGINGFACE_TOKEN}
+      - TAVILY_API_KEY=${TAVILY_API_KEY}
       - HF_HOME=/app/.cache/huggingface
       - TRANSFORMERS_OFFLINE=0
       - HF_DATASETS_OFFLINE=0
