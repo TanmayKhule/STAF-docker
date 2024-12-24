@@ -41,45 +41,50 @@ ENV TRANSFORMERS_OFFLINE=0
 ENV HF_DATASETS_OFFLINE=0
 ENV REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
 
+# Create the start script
+RUN echo '#!/bin/bash\n\
+set -e\n\
+\n\
+echo "Starting Ollama service..."\n\
+\n\
+# Start Ollama in the background\n\
+echo "Waiting for Ollama to become available..."\n\
+for i in {1..30}; do\n\
+    if ollama serve & curl -s http://127.0.0.1:11434/api/version; then\n\
+        echo "Ollama is ready!"\n\
+        break\n\
+    fi\n\
+    sleep 1\n\
+done\n\
+\n\
+# Pull required models\n\
+models=$(python3 -c '\''\n\
+import yaml\n\
+with open("config.yaml") as f:\n\
+    config = yaml.safe_load(f)\n\
+models = config.get("llm", {}).get("models_to_pull", [])\n\
+print(" ".join(models))\n\
+'\'')\n\
+\n\
+for model in $models; do\n\
+    echo "Pulling model: $model"\n\
+    ollama pull $model\n\
+done\n\
+\n\
+# Start FastAPI application\n\
+echo "Starting FastAPI application..."\n\
+exec python3 -m uvicorn app.main:app --host 0.0.0.0 --port 80' > /app/start-ollama.sh
+
+# Make the script executable
+RUN chmod +x /app/start-ollama.sh
+
+
 # Copy application code
 COPY . .
 
-# Create startup script with fixed process management
-COPY <<EOF /start-ollama.sh
-#!/bin/bash
-set -x  # Enable debug mode
-
-echo "Starting Ollama service..."
-# Start Ollama in the background and redirect output
-ollama serve > /var/log/ollama.log 2>&1 &
-
-# Wait for Ollama to start listening on its port
-echo "Waiting for Ollama to become available..."
-for i in {1..30}; do
-    if curl -s http://127.0.0.1:11434/api/version > /dev/null; then
-        echo "Ollama is ready!"
-        # Pull required models
-        for model in llama3.1:70b llama3.1:8b llama3.2:1b; do
-            echo "Pulling model: \$model"
-            ollama pull \$model
-        done
-        echo "Starting FastAPI application..."
-        exec "\$@"
-        exit 0
-    fi
-    echo "Attempt \$i: Waiting for Ollama..."
-    sleep 1
-done
-
-echo "Ollama failed to start. Latest logs:"
-tail -n 50 /var/log/ollama.log
-exit 1
-EOF
-
-RUN chmod +x /start-ollama.sh
 
 # Use the startup script as the entrypoint
-ENTRYPOINT ["/start-ollama.sh"]
+ENTRYPOINT ["/app/start-ollama.sh"]
 
 # Command to run the application
 CMD ["python3", "-m", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]
