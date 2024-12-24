@@ -24,7 +24,7 @@ A framework that generates security test cases from attack trees using LLMs.
    llm:
      model: "llama3.1"  # Must match your Ollama model name
      grader_model: "llama3.1"  # Must match your Ollama model name
-     models_to_pull: ["llama3.1", "llama3.1"]  # List all models to pull at startup
+     models_to_pull: ["llama3.1", "llama3.1:70b"]  # List all models to pull at startup
      temperature: 0
      max_tokens: 200000
      max_attempts: 3
